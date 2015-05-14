@@ -1,0 +1,15 @@
+<div ng-include="'app/hrms/partials/navbar.html'"></div>
+<div class="container" ng-controller="birthdayCtrl">
+    <h3>Today's Birthday</h3>
+
+    <table class="table table-striped">
+        <tbody>
+        <tr ng-repeat="bl in birthdaylists">
+
+            <td align="center"><img src={{bl.photo_url}} class="img-circle img-responsive" alt="Image"><br/>
+                <h3>{{bl.emp_firstname }} {{bl.emp_lastname}}</h3>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

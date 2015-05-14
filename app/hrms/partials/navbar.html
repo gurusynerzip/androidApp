@@ -1,0 +1,36 @@
+<div class="container-fluid" ng-controller="navCtrl">
+    <nav class="nav navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle Navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#"> <i class="glyphicon glyphicon-user"></i> Welcome <span class="text-capitalize">{{ logedinUser  }} </span></a>
+            </div>  <!--Navbar Header-->
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="divider-vertical"></li>
+                    <li>
+                        <a href="#/home">Home</a>
+                    </li>
+                    <li>
+                        <a href="#/birthdays">Birthdays</a>
+                    </li>
+                    <li>
+                        <a href="#/holidays">Holidays</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav pull-right" style="margin-right: 40px;">
+          			<li class="divider-vertical"></li>
+          			<li>
+            			<a href="#/login">logout</a>
+          			</li>
+		  		</ul>
+            </div>
+
+        </div>
+    </nav>
+</div>

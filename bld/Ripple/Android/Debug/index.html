@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>HRMS</title>
+
+    <!-- HRMS references -->
+   <!-- <link href="css/index.css" rel="stylesheet" />-->
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <script src="scripts/angular.js"></script>
+    <script src="scripts/angular-utf8-base64.js"></script>
+    <script src="scripts/angular-ui-router.js"></script>
+    
+</head>
+<body>
+    <div class="container" ng-app="hrmsloginApp">
+        <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <div class="panel-title">Sign In</div>
+                    <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#">Forgot password?</a></div>
+                </div>
+
+                <div style="padding-top:30px" class="panel-body">
+
+                    <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+
+                    <form id="loginform" class="form-horizontal" role="form" ng-controller="loginCtrl">
+
+                        <div style="margin-bottom: 25px" class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <input id="login-username" type="text" class="form-control" name="username" value="" placeholder="username" ng-model="uname" required>
+                        </div>
+
+                        <div style="margin-bottom: 25px" class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input id="login-password" type="password" class="form-control" name="password" placeholder="password" ng-model="passwd" required>
+                        </div>
+
+
+
+                        <div style="margin-top:10px" class="form-group">
+                            <!-- Button -->
+
+                            <div class="col-sm-12 controls">
+                                <a id="btn-login" href="#" class="btn btn-success" ng-click="submit(uname, passwd)">Login</a>
+                                <a id="btn-fblogin" href="#" class="btn btn-primary">Login with Google+</a>
+
+                            </div>
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Cordova reference, this is added to your app when it's built. -->
+   <!-- <script src="cordova.js"></script>
+    <script src="scripts/platformOverrides.js"></script>
+    <script src="scripts/bootstrap.js"></script>
+    <script src="scripts/jquery.min.js"></script>
+    <script src="scripts/index.js"></script>-->
+    
+    <script>
+        var app = angular.module('hrmsloginApp', ['utf8-base64', 'ui.router']);
+
+        app.config(function($stateProvider, $urlRouterProvider){
+
+            $urlRouterProvider.otherwise('/login');  //By default route to login page
+
+            $stateProvider
+                    .state('login', {
+                        url: '/login',
+                        templateUrl: 'index.html'
+                    })
+                    .state('home', {
+                        url: '/home',
+                        templateUrl:'app/hrms/view/home.html'
+                    })
+        });
+
+        app.factory('loginFactory', [ 'base64', function(base64){
+            return ({
+                encodedData: {uname: "", password:""},
+                convertBase64 : function(name, pass){
+                    this.encodedData.uname = base64.encode(name);
+                    this.encodedData.password = base64.encode(pass);
+                }
+            })
+        }]);
+        app.controller('loginCtrl', ['$scope', '$http','$location','$window','loginFactory', function ($scope, $http, $location, $window, loginFactory) {
+
+            $scope.submit = function(){
+                loginFactory.convertBase64($scope.uname, $scope.passwd);
+                var encodedUname = loginFactory.encodedData.uname;
+                var encodedPassword = loginFactory.encodedData.password;
+                console.log(encodedUname);
+                console.log(encodedPassword);
+
+                $http({method: 'GET', url: 'http://staging.hrms.synerzip.in/symfony/web/index.php/api/loginapi', headers: {
+                    'user-id': encodedname, 'password': encodedpass }
+                }).success(function(data, response){
+                    console.log(data["api-key"]);
+                    console.log(data["response"]);
+                    if(data["response"] === 'success'){
+                        console.log('LoggedIn');
+                        $location.path('/home');
+                    } else {
+                        console.log('Not LoggedIn');
+                        $location.path('/login');
+                    }
+
+
+                }).error(function (data, status, headers) {
+                    // error message
+                });
+            }
+        }]);
+    </script>
+</body>
+</html>
